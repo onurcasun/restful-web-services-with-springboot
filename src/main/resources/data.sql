@@ -1,3 +1,5 @@
 insert into user values (1001, sysdate(), 'Bob')
 insert into user values (1002, sysdate(), 'Charlotte')
 insert into user values (1003, sysdate(), 'Rose')
+insert into post values (10001, 'My First Post', 1001)
+insert into post values (10002, 'My Second Post', 1001)
