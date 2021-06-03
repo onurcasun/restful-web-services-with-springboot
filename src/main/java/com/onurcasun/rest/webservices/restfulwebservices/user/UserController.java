@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,15 +27,23 @@ public class UserController {
     @GetMapping(path = "/users/{id}")
     public User retrieveUser(@PathVariable int id) {
         User user = service.findOne(id);
-        if(user==null){
-            throw new UserNotFoundException("id-" + id);
+        if (user == null) {
+            throw new UserNotFoundException("User ID not found: " + id);
         }
 
         return user;
     }
 
+    @DeleteMapping("/users/{id}")
+    public User deleteUser(@PathVariable int id) {
+        User user = service.deleteById(id);
+        if (user == null)
+            throw new UserNotFoundException("User ID not found: " + id);
+        return user;
+    }
+
     @PostMapping(path = "/users")
-    public ResponseEntity<Object> createUser(@RequestBody User user){
+    public ResponseEntity<Object> createUser(@RequestBody User user) {
         User savedUser = service.save(user);
 
         // "/users/5"
@@ -47,10 +56,7 @@ public class UserController {
     }
 
     private URI buildCreatedUserPathFromUser(User savedUser) {
-        return ServletUriComponentsBuilder
-            .fromCurrentRequest()
-            .path("/{id}")
-            .buildAndExpand(savedUser.getId()).toUri();
+        return ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(savedUser.getId()).toUri();
     }
 
 }
