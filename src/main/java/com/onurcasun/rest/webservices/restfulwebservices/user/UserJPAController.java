@@ -67,6 +67,15 @@ public class UserJPAController {
         return createResponseEntityByUri(uri);
     }
 
+    @GetMapping(path = "/jpa/users/{id}/posts")
+    public List<Post> retrieveAllPostsOfUser(@PathVariable int id) {
+        Optional<User> userOptional = userRepository.findById(id);;
+        if(!userOptional.isPresent())        
+            throw new UserNotFoundException("user id not found: " + id);
+        
+        return userOptional.get().getPosts() ;
+    }
+
     private URI buildUriForUser(User savedUser, ServletUriComponentsBuilder fromCurrentRequest) {
         UriComponentsBuilder uriCompBuilder = fromCurrentRequest.path("/{id}"); // "/users/5"
         UriComponents uriComponent = uriCompBuilder.buildAndExpand(savedUser.getId());
