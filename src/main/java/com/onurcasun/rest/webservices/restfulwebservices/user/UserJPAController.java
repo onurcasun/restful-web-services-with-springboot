@@ -28,6 +28,9 @@ public class UserJPAController {
 
     @Autowired
     private UserRepository userRepository;
+    
+    @Autowired
+    private PostRepository postRepository;
 
     @GetMapping(path = "/jpa/users")
     public List<User> retrieveAllUsers() {
@@ -63,7 +66,7 @@ public class UserJPAController {
 
         // callback about saved user to user which calling this method.
         ServletUriComponentsBuilder fromCurrentRequest = ServletUriComponentsBuilder.fromCurrentRequest();
-        URI uri = buildUriForUser(savedUser, fromCurrentRequest);
+        URI uri = buildUriForUser(savedUser.getId(), fromCurrentRequest);
         return createResponseEntityByUri(uri);
     }
 
@@ -76,9 +79,26 @@ public class UserJPAController {
         return userOptional.get().getPosts() ;
     }
 
-    private URI buildUriForUser(User savedUser, ServletUriComponentsBuilder fromCurrentRequest) {
+    @PostMapping(path = "/jpa/users/{id}/posts")
+    public ResponseEntity<Object> createPost(@PathVariable int id, @RequestBody Post post) {
+        
+        Optional<User> userOptional = userRepository.findById(id);;
+        if(!userOptional.isPresent()){
+            throw new UserNotFoundException("user id not found: " + id);
+        }
+        User user = userOptional.get();
+
+        post.setUser(user);
+        postRepository.save(post);
+        // callback about saved user to user which calling this method.
+        ServletUriComponentsBuilder fromCurrentRequest = ServletUriComponentsBuilder.fromCurrentRequest();
+        URI uri = buildUriForUser(post.getId(), fromCurrentRequest);
+        return createResponseEntityByUri(uri);
+    }
+
+    private URI buildUriForUser(int id, ServletUriComponentsBuilder fromCurrentRequest) {
         UriComponentsBuilder uriCompBuilder = fromCurrentRequest.path("/{id}"); // "/users/5"
-        UriComponents uriComponent = uriCompBuilder.buildAndExpand(savedUser.getId());
+        UriComponents uriComponent = uriCompBuilder.buildAndExpand(id);
         return uriComponent.toUri();
     }
 
