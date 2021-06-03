@@ -2,14 +2,30 @@ package com.onurcasun.rest.webservices.restfulwebservices.user;
 
 import java.util.Date;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.Size;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
+
+@Schema(description = "All details about the user")
+@Entity
 public class User {
 
+    @Id
+    @GeneratedValue
     private Integer id;
-    @Size(min = 2, message = "Name hould have at least 2 characters") private String name;
-    @Past private Date birthDate;
+
+    @Size(min = 2, message = "Name hould have at least 2 characters")
+    @Schema(description = "Name should have at least 2 characters")
+    private String name;
+
+    @Past 
+    @Schema(description = "Should be a past date")
+    private Date birthDate;
 
     protected User(){ }
 
