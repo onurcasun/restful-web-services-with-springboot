@@ -44,20 +44,25 @@ public class UserController {
         User user = service.deleteById(id);
         if (user == null)
             throw new UserNotFoundException("User ID not found: " + id);
+
         return user;
     }
 
     @PostMapping(path = "/users")
     public ResponseEntity<Object> createUser(@Valid @RequestBody User user) {
+        // Saving user via user data service.
         User savedUser = service.save(user);
-        URI uri = buildUriForUser(savedUser);
+
+        // callback about saved user to user which calling this method.
+        ServletUriComponentsBuilder fromCurrentRequest = ServletUriComponentsBuilder.fromCurrentRequest();
+        URI uri = buildUriForUser(savedUser, fromCurrentRequest);
         return createResponseEntityByUri(uri);
     }
 
-    private URI buildUriForUser(User savedUser) {
-        ServletUriComponentsBuilder fromCurrentRequest = ServletUriComponentsBuilder.fromCurrentRequest();
+    private URI buildUriForUser(User savedUser, ServletUriComponentsBuilder fromCurrentRequest) {
         UriComponentsBuilder uriCompBuilder = fromCurrentRequest.path("/{id}"); // "/users/5"
-        return uriCompBuilder.buildAndExpand(savedUser.getId()).toUri();
+        UriComponents uriComponent = uriCompBuilder.buildAndExpand(savedUser.getId());
+        return uriComponent.toUri();
     }
 
     private ResponseEntity<Object> createResponseEntityByUri(URI uri) {
