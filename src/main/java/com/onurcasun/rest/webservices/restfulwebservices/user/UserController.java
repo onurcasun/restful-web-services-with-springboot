@@ -41,11 +41,11 @@ public class UserController {
         }
 
         EntityModel<User> userEntityModel = EntityModel.of(user);
-        addRelatedLinkToUserEntityModel(userEntityModel);
+        addAllUsersPageLinkTo(userEntityModel); // "all users page"(/users) link added to userEntityModel
         return userEntityModel;
     }
 
-    private void addRelatedLinkToUserEntityModel(EntityModel<User> userEntityModel) {
+    private void addAllUsersPageLinkTo(EntityModel<User> userEntityModel) {
         WebMvcLinkBuilder linkToUsers = linkTo(methodOn(this.getClass()).retrieveAllUsers());
         userEntityModel.add(linkToUsers.withRel("all-users"));
     }
