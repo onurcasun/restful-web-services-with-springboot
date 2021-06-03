@@ -2,15 +2,16 @@ package com.onurcasun.rest.webservices.restfulwebservices.user;
 
 import java.util.Date;
 
+import javax.validation.constraints.Past;
+import javax.validation.constraints.Size;
+
 public class User {
 
     private Integer id;
-    private String name;
-    private Date birthDate;
+    @Size(min = 2, message = "Name hould have at least 2 characters") private String name;
+    @Past private Date birthDate;
 
-    protected User(){
-        
-    }
+    protected User(){ }
 
     public User(Integer id, String name, Date birthDate) {
         super();
