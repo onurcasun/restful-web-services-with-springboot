@@ -15,6 +15,10 @@ public class ExceptionResponse {
         this.details = details;
     }
 
+    public static ExceptionResponse create(Date timestamp, String message, String details){
+        return new ExceptionResponse(timestamp, message, details);
+    }
+
     public Date getTimestamp() {
         return this.timestamp;
     }
