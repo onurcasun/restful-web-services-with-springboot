@@ -1,6 +1,5 @@
 package com.onurcasun.rest.webservices.restfulwebservices.exception;
 
-import java.time.LocalDate;
 import java.util.Date;
 
 import com.onurcasun.rest.webservices.restfulwebservices.user.UserNotFoundException;
