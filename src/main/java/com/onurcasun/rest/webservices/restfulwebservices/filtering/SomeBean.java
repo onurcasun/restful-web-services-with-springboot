@@ -1,15 +1,13 @@
 package com.onurcasun.rest.webservices.restfulwebservices.filtering;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonFilter;
 
-@JsonIgnoreProperties(value = {"field1"}) // another approach to ignore mapping.
+@JsonFilter("SomeBeanFilter")
 public class SomeBean {
-    private String field1;
-    private String field2;
 
-    @JsonIgnore
-    private String field3; //will be ignored on mapping and will not show the user.
+    private String field1;
+    private String field2;    
+    private String field3;
 
     public SomeBean(String field1, String field2, String field3) {
         this.field1 = field1;
