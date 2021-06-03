@@ -23,23 +23,22 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
 
     @ExceptionHandler(UserNotFoundException.class)
     public final ResponseEntity<Object> handleUserNotFoundException(UserNotFoundException ex, WebRequest request) {
-
-        return buildResponseEntity(ex, request, HttpStatus.NOT_FOUND);            
+        return buildResponseEntity(ex, request, HttpStatus.NOT_FOUND);
     }
 
     private ResponseEntity<Object> buildResponseEntity(Exception ex, WebRequest request, HttpStatus status) {
-        ExceptionResponse exceptionResponse = createExceptionResponse(ex.getMessage(), request.getDescription(false));        
+        ExceptionResponse exceptionResponse = createExceptionResponse(ex.getMessage(), request.getDescription(false));
         ResponseEntity<Object> responseEntity = createResponseEntity(exceptionResponse, status);
         return responseEntity;
     }
-    
+
     private ExceptionResponse createExceptionResponse(String message, String description) {
         return new ExceptionResponse(new Date(), message, description);
     }
 
-    private ResponseEntity<Object> createResponseEntity(ExceptionResponse exceptionResponse, HttpStatus errorHttpStatus ) {
+    private ResponseEntity<Object> createResponseEntity(ExceptionResponse exceptionResponse,
+            HttpStatus errorHttpStatus) {
         return new ResponseEntity<Object>(exceptionResponse, errorHttpStatus);
     }
 
-    
 }
