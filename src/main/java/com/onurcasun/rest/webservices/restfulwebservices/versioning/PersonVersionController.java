@@ -7,13 +7,13 @@ import org.springframework.web.bind.annotation.RestController;
 public class PersonVersionController {
 
     @GetMapping("/v1/person")
-    public Person1 version1(){
-        return new Person1("Bob Dylan");
+    public PersonV1 version1(){
+        return new PersonV1("Bob Dylan");
     }
 
     @GetMapping("/v2/person")
-    public Person2 version2(){
-        return new Person2(new Name("Bob", "Dylan"));
+    public PersonV2 version2(){
+        return new PersonV2(new Name("Bob", "Dylan"));
     }
 
     

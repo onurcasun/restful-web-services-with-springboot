@@ -1,13 +1,13 @@
 package com.onurcasun.rest.webservices.restfulwebservices.versioning;
 
-public class Person1 {
+public class PersonV1 {
     private String name;
     
-    public Person1() {
+    public PersonV1() {
         super();
     }
 
-    public Person1(String name) {
+    public PersonV1(String name) {
         super();
         this.name = name;
     }

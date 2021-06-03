@@ -1,9 +1,9 @@
 package com.onurcasun.rest.webservices.restfulwebservices.versioning;
 
-public class Person2 {
+public class PersonV2 {
     private Name name;
     
-    public Person2(Name name) {
+    public PersonV2(Name name) {
         this.setName(name);
     }
 
