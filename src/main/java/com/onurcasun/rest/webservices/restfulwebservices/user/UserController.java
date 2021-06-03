@@ -3,8 +3,11 @@ package com.onurcasun.rest.webservices.restfulwebservices.user;
 import java.net.URI;
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.ResponseEntity.BodyBuilder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,6 +15,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.springframework.web.util.UriComponents;
+import org.springframework.web.util.UriComponentsBuilder;
 
 @RestController
 public class UserController {
@@ -43,20 +48,22 @@ public class UserController {
     }
 
     @PostMapping(path = "/users")
-    public ResponseEntity<Object> createUser(@RequestBody User user) {
+    public ResponseEntity<Object> createUser(@Valid @RequestBody User user) {
         User savedUser = service.save(user);
-
-        // "/users/5"
-        URI location = buildCreatedUserPathFromUser(savedUser);
-        return buildResponseEntityFromPath(location);
+        URI uri = buildUriForUser(savedUser);
+        return createResponseEntityByUri(uri);
     }
 
-    private ResponseEntity<Object> buildResponseEntityFromPath(URI location) {
-        return ResponseEntity.created(location).build();
+    private URI buildUriForUser(User savedUser) {
+        ServletUriComponentsBuilder fromCurrentRequest = ServletUriComponentsBuilder.fromCurrentRequest();
+        UriComponentsBuilder uriCompBuilder = fromCurrentRequest.path("/{id}"); // "/users/5"
+        return uriCompBuilder.buildAndExpand(savedUser.getId()).toUri();
     }
 
-    private URI buildCreatedUserPathFromUser(User savedUser) {
-        return ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(savedUser.getId()).toUri();
+    private ResponseEntity<Object> createResponseEntityByUri(URI uri) {
+        BodyBuilder bodyBuilder = ResponseEntity.created(uri);
+        ResponseEntity<Object> responseEntity = bodyBuilder.build();
+        return responseEntity;
     }
 
 }
